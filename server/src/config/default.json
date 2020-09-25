@@ -1,0 +1,4 @@
+{
+  "DB_NAME": "recipeManager",
+  "JWT_SECRET_KEY": "unsecureKey"
+}
