@@ -7,6 +7,7 @@ import { IngredientResolver } from "./resolvers/ingredients";
 import * as dotenv from "dotenv";
 import { createConnection } from "typeorm";
 import { Ingredient } from "./entities/Ingredient";
+import { Recipe } from "./entities/Recipe";
 dotenv.config();
 const PORT = process.env.SERVER_PORT;
 
@@ -18,7 +19,7 @@ const main = async () => {
     password: process.env.DB_PASSWORD,
     logging: true,
     synchronize: true,
-    entities: [Ingredient]
+    entities: [Ingredient, Recipe]
   });
 
   const apolloServer = new ApolloServer({
