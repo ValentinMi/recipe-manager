@@ -8,8 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Ingredient = void 0;
+exports.validateIngredient = exports.Ingredient = void 0;
+const joi_1 = __importDefault(require("joi"));
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 let Ingredient = class Ingredient extends typeorm_1.BaseEntity {
@@ -39,4 +43,10 @@ Ingredient = __decorate([
     typeorm_1.Entity()
 ], Ingredient);
 exports.Ingredient = Ingredient;
+exports.validateIngredient = (ingredient) => {
+    const schema = joi_1.default.object({
+        name: joi_1.default.string().min(2).max(80).required()
+    });
+    return schema.validate(ingredient);
+};
 //# sourceMappingURL=Ingredient.js.map

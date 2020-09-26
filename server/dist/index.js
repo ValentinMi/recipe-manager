@@ -31,26 +31,40 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require("class-validator");
+require("reflect-metadata");
 const apollo_server_express_1 = require("apollo-server-express");
 const type_graphql_1 = require("type-graphql");
-const dotenv = __importStar(require("dotenv"));
 const express_1 = __importDefault(require("express"));
+const ingredients_1 = require("./resolvers/ingredients");
+const dotenv = __importStar(require("dotenv"));
+const typeorm_1 = require("typeorm");
+const Ingredient_1 = require("./entities/Ingredient");
 dotenv.config();
 const PORT = process.env.SERVER_PORT;
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    const app = express_1.default();
+    yield typeorm_1.createConnection({
+        type: "postgres",
+        database: "recipemanager",
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        logging: true,
+        synchronize: true,
+        entities: [Ingredient_1.Ingredient]
+    });
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: yield type_graphql_1.buildSchema({
-            resolvers: [],
+            resolvers: [ingredients_1.IngredientResolver],
             validate: false
         }),
         context: ({ req, res }) => ({ req, res })
     });
+    const app = express_1.default();
     apolloServer.applyMiddleware({
         app,
         cors: false
     });
-    app.listen(process.env.PORT, () => {
+    app.listen(PORT, () => {
         console.log(`Server is listening on port ${PORT}`);
     });
 });

@@ -1,3 +1,5 @@
+import Joi from "joi";
+import { IngredientInput } from "src/resolvers/ingredients";
 import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -14,14 +16,11 @@ import {
 export class Ingredient extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Field()
   @Column()
-  name: string;
-
-  // @ManyToOne(() => Category, (category) => category.ingredients)
-  // category: Category
+  name!: string;
 
   @Field(() => String)
   @CreateDateColumn()
@@ -31,3 +30,13 @@ export class Ingredient extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 }
+
+export const validateIngredient = (
+  ingredient: IngredientInput
+): Joi.ValidationResult => {
+  const schema = Joi.object({
+    name: Joi.string().min(2).max(80).required()
+  });
+
+  return schema.validate(ingredient);
+};
