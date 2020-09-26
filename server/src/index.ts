@@ -8,6 +8,7 @@ import * as dotenv from "dotenv";
 import { createConnection } from "typeorm";
 import { Ingredient } from "./entities/Ingredient";
 import { Recipe } from "./entities/Recipe";
+import { RecipeResolver } from "./resolvers/recipes";
 dotenv.config();
 const PORT = process.env.SERVER_PORT;
 
@@ -24,7 +25,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [IngredientResolver],
+      resolvers: [IngredientResolver, RecipeResolver],
       validate: false
     }),
     context: ({ req, res }) => ({ req, res })
