@@ -90,7 +90,8 @@ export class IngredientResolver {
   @Mutation(() => Ingredient, { nullable: true })
   async updateIngredient(
     @Arg("id") id: number,
-    @Arg("input", () => String, { nullable: true }) input: IngredientInput
+    @Arg("input", () => IngredientInput, { nullable: true })
+    input: IngredientInput
   ): Promise<IngredientResponse> {
     const { error } = validate(input);
     if (error)

@@ -47,7 +47,7 @@ export class RecipeResolver {
 
   // Read one
   @Query(() => Recipe, { nullable: true })
-  post(@Arg("id") id: number): Promise<Recipe | undefined> {
+  recipe(@Arg("id") id: number): Promise<Recipe | undefined> {
     return Recipe.findOne(id);
   }
 
@@ -57,7 +57,7 @@ export class RecipeResolver {
   @Mutation(() => Recipe)
   async createRecipe(
     @Arg("input") input: RecipeInput
-  ): Promise<RecipeResponse> {
+  ): Promise<Recipe | RecipeResponse> {
     const { error } = validate(input);
     if (error)
       return {
@@ -70,14 +70,14 @@ export class RecipeResolver {
       };
 
     const newRecipe = await Recipe.create(input).save();
-    return { recipe: newRecipe };
+    return newRecipe;
   }
 
   // Update
   @Mutation(() => Recipe, { nullable: true })
   async updateRecipe(
     @Arg("id") id: number,
-    @Arg("input", () => String, { nullable: true }) input: RecipeInput
+    @Arg("input", () => RecipeInput, { nullable: true }) input: RecipeInput
   ): Promise<RecipeResponse> {
     const { error } = validate(input);
     if (error)
