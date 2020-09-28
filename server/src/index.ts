@@ -9,19 +9,24 @@ import { createConnection } from "typeorm";
 import { Ingredient } from "./entities/Ingredient";
 import { Recipe } from "./entities/Recipe";
 import { RecipeResolver } from "./resolvers/recipes";
+import cors from "cors";
+import path from "path";
 dotenv.config();
 const PORT = process.env.SERVER_PORT;
 
 const main = async () => {
-  await createConnection({
+  const conn = await createConnection({
     type: "postgres",
     database: "recipemanager",
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     logging: true,
-    synchronize: true,
+    // synchronize: true,
+    migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Ingredient, Recipe]
   });
+
+  await conn.runMigrations();
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
@@ -32,6 +37,13 @@ const main = async () => {
   });
 
   const app = express();
+
+  app.use(
+    cors({
+      origin: process.env.CORS_ORIGIN,
+      credentials: true
+    })
+  );
 
   apolloServer.applyMiddleware({
     app,
