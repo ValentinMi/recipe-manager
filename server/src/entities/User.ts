@@ -28,6 +28,9 @@ export class User extends BaseEntity {
   @Column()
   password!: string;
 
+  @Column({ nullable: true })
+  isAdmin: boolean;
+
   @Field(() => String)
   @CreateDateColumn()
   createdAt: Date;
