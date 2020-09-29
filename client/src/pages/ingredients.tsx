@@ -11,7 +11,7 @@ const Ingredients: React.FC<IngredientsProps> = ({}) => {
   const { data, loading } = useIngredientsQuery();
 
   return (
-    <Flex w="100%" align="center" justify="center">
+    <Flex w="100%" align="center" justify="center" p={6}>
       {loading ? (
         <Spinner />
       ) : (
