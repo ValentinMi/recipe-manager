@@ -6,11 +6,13 @@ import {
   Arg,
   Field,
   InputType,
+  Int,
   Mutation,
   ObjectType,
   Query,
   Resolver
 } from "type-graphql";
+import { getConnection } from "typeorm";
 
 // TYPES
 
@@ -29,6 +31,14 @@ class FieldError {
 }
 
 @ObjectType()
+class PaginatedIngredients {
+  @Field(() => [Ingredient])
+  ingredients: Ingredient[];
+  @Field()
+  hasMore: boolean;
+}
+
+@ObjectType()
 class IngredientResponse {
   @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[];
@@ -42,14 +52,37 @@ export class IngredientResolver {
   // QUERY
 
   // Read
-  @Query(() => [Ingredient])
-  async ingredients(): Promise<Ingredient[]> {
-    return Ingredient.find();
+  @Query(() => PaginatedIngredients)
+  async ingredients(
+    @Arg("limit", () => Int) limit: number,
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null
+  ): Promise<PaginatedIngredients> {
+    // 20 -> 21
+    const realLimit = Math.min(50, limit);
+    const reaLimitPlusOne = realLimit + 1;
+    const qb = getConnection()
+      .getRepository(Ingredient)
+      .createQueryBuilder("p")
+      .orderBy('"createdAt"', "DESC")
+      .take(reaLimitPlusOne);
+
+    if (cursor) {
+      qb.where('"createdAt" < :cursor', {
+        cursor: new Date(parseInt(cursor))
+      });
+    }
+
+    const ingredients = await qb.getMany();
+
+    return {
+      ingredients: ingredients.slice(0, realLimit),
+      hasMore: ingredients.length === reaLimitPlusOne
+    };
   }
 
   // Read one
   @Query(() => Ingredient, { nullable: true })
-  post(@Arg("id") id: number): Promise<Ingredient | undefined> {
+  ingredient(@Arg("id") id: number): Promise<Ingredient | undefined> {
     return Ingredient.findOne(id);
   }
 
