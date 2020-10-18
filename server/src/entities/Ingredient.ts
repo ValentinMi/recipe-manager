@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { IngredientInput } from "../resolvers/ingredients";
+import { IngredientInput } from "../resolvers/ingredient";
 import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,

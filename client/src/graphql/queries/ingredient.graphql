@@ -1,0 +1,8 @@
+query Ingredient($id: Float!) {
+  ingredient(id: $id) {
+    id
+    createdAt
+    updatedAt
+    name
+  }
+}

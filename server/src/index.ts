@@ -6,12 +6,12 @@ import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
 import connectRedis from "connect-redis";
-import { IngredientResolver } from "./resolvers/ingredients";
+import { IngredientResolver } from "./resolvers/ingredient";
 import * as dotenv from "dotenv";
 import { createConnection } from "typeorm";
 import { Ingredient } from "./entities/Ingredient";
 import { Recipe } from "./entities/Recipe";
-import { RecipeResolver } from "./resolvers/recipes";
+import { RecipeResolver } from "./resolvers/recipe";
 import cors from "cors";
 import path from "path";
 import { User } from "./entities/User";
@@ -27,12 +27,12 @@ const main = async () => {
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     logging: true,
-    // synchronize: true,
-    migrations: [path.join(__dirname, "./migrations/*")],
+    synchronize: true,
+    // migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Ingredient, Recipe, User]
   });
 
-  await conn.runMigrations();
+  // await conn.runMigrations();
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({

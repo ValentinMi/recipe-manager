@@ -6,11 +6,11 @@ import {
   Arg,
   Field,
   InputType,
-  Int,
   Mutation,
   ObjectType,
   Query,
-  Resolver
+  Resolver,
+  Int
 } from "type-graphql";
 import { getConnection } from "typeorm";
 
@@ -62,7 +62,7 @@ export class IngredientResolver {
     const reaLimitPlusOne = realLimit + 1;
     const qb = getConnection()
       .getRepository(Ingredient)
-      .createQueryBuilder("p")
+      .createQueryBuilder("ingr")
       .orderBy('"createdAt"', "DESC")
       .take(reaLimitPlusOne);
 
@@ -73,6 +73,7 @@ export class IngredientResolver {
     }
 
     const ingredients = await qb.getMany();
+    console.log("lal", ingredients);
 
     return {
       ingredients: ingredients.slice(0, realLimit),

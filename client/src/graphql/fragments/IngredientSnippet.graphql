@@ -1,0 +1,6 @@
+fragment IngredientSnippet on Ingredient {
+  id
+  createdAt
+  updatedAt
+  name
+}

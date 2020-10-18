@@ -30,22 +30,24 @@ const Drawer: React.FC<DrawerProps> = ({}) => {
   const btnRef = useRef();
 
   return (
-    <>
+    <Box zIndex={10}>
       {/* CLOSE */}
       <Flex
         bg="green.400"
-        width="50px"
+        width="6vh"
         height="100vh"
         justify="center"
         position="fixed"
       >
         <IconButton
+          mt={3}
           aria-label="Open menu"
           icon="chevron-right"
           onClick={onOpen}
           border="none"
           background="none"
           color="white"
+          size="lg"
           _hover={{ backgroundColor: "green.200", color: "black" }}
         />
       </Flex>
@@ -83,7 +85,7 @@ const Drawer: React.FC<DrawerProps> = ({}) => {
           </DrawerFooter>
         </DrawerContent>
       </ChakraDrawer>
-    </>
+    </Box>
   );
 };
 

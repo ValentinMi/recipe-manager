@@ -13,10 +13,7 @@ function MyApp({ Component, pageProps }) {
     <ThemeProvider theme={theme}>
       <ColorModeProvider>
         <CSSReset />
-        <Flex>
-          <Drawer />
-          <Component {...pageProps} />
-        </Flex>
+        <Component {...pageProps} />
       </ColorModeProvider>
     </ThemeProvider>
   );

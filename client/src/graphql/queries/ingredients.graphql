@@ -1,6 +1,8 @@
-query Ingredients {
-  ingredients {
-    id
-    name
+query Ingredients($limit: Int!, $cursor: String) {
+  ingredients(limit: $limit, cursor: $cursor) {
+    hasMore
+    ingredients {
+      ...IngredientSnippet
+    }
   }
 }
